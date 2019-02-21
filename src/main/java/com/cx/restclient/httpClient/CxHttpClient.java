@@ -14,6 +14,7 @@ import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
@@ -25,7 +26,7 @@ import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.ProxySelector;
 import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -39,7 +40,6 @@ import static com.cx.restclient.common.CxPARAM.AUTHENTICATION;
 import static com.cx.restclient.common.CxPARAM.ORIGIN_HEADER;
 import static com.cx.restclient.httpClient.utils.ContentType.CONTENT_TYPE_APPLICATION_JSON;
 import static com.cx.restclient.httpClient.utils.HttpClientHelper.*;
-import org.apache.http.HttpStatus;
 
 /**
  * Created by Galn on 05/02/2018.
@@ -72,7 +72,9 @@ public class CxHttpClient {
         this.rootUri = UrlUtils.parseURLToString(hostname, "CxRestAPI/");
         this.cxOrigin = origin;
         //create httpclient
-        HttpClientBuilder builder = HttpClientBuilder.create().addInterceptorFirst(requestFilter);
+        HttpClientBuilder builder = HttpClientBuilder.create()
+        		.addInterceptorFirst(requestFilter)
+        		.setRoutePlanner(new SystemDefaultRoutePlanner(ProxySelector.getDefault()));
         if (disableSSLValidation) {
             builder = disableCertificateValidation(builder, logi);
         }

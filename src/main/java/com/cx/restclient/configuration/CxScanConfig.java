@@ -12,7 +12,9 @@ import java.util.Properties;
  */
 public class CxScanConfig implements Serializable {
 
-    private Boolean sastEnabled = false;
+	private static final long serialVersionUID = 1L;
+	
+	private Boolean sastEnabled = false;
     private Boolean osaEnabled = false;
 
     private String cxOrigin;
@@ -22,6 +24,9 @@ public class CxScanConfig implements Serializable {
     private String username;
     private String password;
     private String url;
+    private boolean useProxy;
+    private String proxyHost;
+    private Integer proxyPort;
     private String projectName;
     private String teamPath;
     private String teamId;
@@ -71,6 +76,15 @@ public class CxScanConfig implements Serializable {
         this.password = password;
         this.cxOrigin = cxOrigin;
         this.disableCertificateValidation = disableCertificateValidation;
+    }
+
+    public CxScanConfig(String url, String username, String password,
+    		boolean useProxy, String proxyHost, Integer proxyPort,
+    		String cxOrigin, boolean disableCertificateValidation) {
+    	this(url, username, password, cxOrigin, disableCertificateValidation);
+        this.useProxy = useProxy;
+        this.proxyHost = proxyHost;
+        this.proxyPort = proxyPort;
     }
 
     public Boolean getSastEnabled() {
@@ -145,7 +159,31 @@ public class CxScanConfig implements Serializable {
         this.url = url;
     }
 
-    public String getProjectName() {
+    public boolean isUseProxy() {
+		return useProxy;
+	}
+
+	public void setUseProxy(boolean useProxy) {
+		this.useProxy = useProxy;
+	}
+
+	public String getProxyHost() {
+		return proxyHost;
+	}
+
+	public void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
+	}
+
+	public Integer getProxyPort() {
+		return proxyPort;
+	}
+
+	public void setProxyPort(Integer proxyPort) {
+		this.proxyPort = proxyPort;
+	}
+
+	public String getProjectName() {
         return projectName;
     }
 
